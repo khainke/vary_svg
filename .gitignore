@@ -1,0 +1,7 @@
+# files and directories created by pub.
+.dart_tool/
+.packages
+
+# build output.
+build/
+example/out
