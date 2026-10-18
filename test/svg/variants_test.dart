@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:vary_svg/model/placeholder.dart';
-import 'package:vary_svg/svg/variants.dart';
+import 'package:vary_svg/svg/build_variants.dart';
 import 'package:xml/xml.dart';
 import 'package:xml/xpath.dart';
 

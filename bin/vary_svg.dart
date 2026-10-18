@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:csv/csv.dart';
 import 'package:logging/logging.dart';
-import 'package:vary_svg/log/logging.dart';
+import 'package:vary_svg/application/logging.dart';
 import 'package:vary_svg/model/config.dart';
 import 'package:vary_svg/model/options.dart';
 import 'package:vary_svg/model/placeholder.dart';
