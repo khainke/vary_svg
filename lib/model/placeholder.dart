@@ -47,11 +47,29 @@ class Placeholder {
   final String column;
 
   const Placeholder({
-    this.value,
     this.id,
+    this.value,
     required this.type,
     required this.column,
   });
+
+  const Placeholder.text({
+    this.id,
+    this.value,
+    required this.column,
+  }) : type = PlaceholderType.text;
+
+  const Placeholder.path({
+    this.id,
+    this.value,
+    required this.column,
+  }) : type = PlaceholderType.path;
+
+  const Placeholder.bool({
+    this.id,
+    this.value,
+    required this.column,
+  }) : type = PlaceholderType.bool;
 
   factory Placeholder.fromJson(Map<String, Object?> json) {
     String typeName = json['type'] as String;
