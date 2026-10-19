@@ -1,3 +1,5 @@
+import 'package:vary_svg/json/json_utils.dart';
+
 /// Evaluates a column in a record to a boolean
 /// value, that determines whether this record
 /// should be used.
@@ -39,19 +41,23 @@ class Enabler {
       return v;
     }
     if (v is String) {
-      const stringMapping = {
-        'ENABLED': true,
-        'enabled': true,
-        'TRUE': true,
-        'true': true,
-        '1': true,
-        'DISABLED': false,
-        'disabled': false,
-        'FALSE': false,
+      const Map<String, bool> mappedValues = {
         'false': false,
+        'FALSE': false,
         '0': false,
+        'no': false,
+        'NO': false,
+        'disabled': false,
+        'DISABLED': false,
+        'true': true,
+        'TRUE': true,
+        '1': true,
+        'yes': true,
+        'YES': true,
+        'enabled': true,
+        'ENABLED': true,
       };
-      return stringMapping[caseSensitive ? v : v.toLowerCase()];
+      return mappedValues[caseSensitive ? v : v.toLowerCase()];
     }
     return bool.tryParse(v.toString(), caseSensitive: caseSensitive);
   }
@@ -62,13 +68,9 @@ class Enabler {
   }) : evaluate = _boolEvaluate;
 
   factory Enabler.fromJson(Map<String, Object?> json) {
-    final defaultValueStr = json['defaultValue'] as String?;
-    final defaultValue = defaultValueStr != null
-        ? bool.tryParse(defaultValueStr) ?? false
-        : false;
     return Enabler.bool(
-      column: json['columnName'] as String,
-      defaultValue: defaultValue,
+      column: json['column'] as String,
+      defaultValue: tryParseJsonBool(json['default'] as String?) ?? false,
     );
   }
 

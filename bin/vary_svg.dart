@@ -33,17 +33,17 @@ void main(List<String> args) async {
     abbr: 't',
     help: 'Path to the template file.',
     aliases: ['templatePath'],
-    valueHelp: "path/to/template.svg",
-    defaultsTo: "template.svg",
+    valueHelp: 'path/to/template.svg',
+    defaultsTo: 'template.svg',
   );
 
   parser.addOption(
-    'values',
-    abbr: 'v',
-    help: 'Path to the values file.',
-    aliases: ['valuesPath'],
-    valueHelp: "path/to/values.csv",
-    defaultsTo: "values.csv",
+    'records',
+    abbr: 'r',
+    help: 'Path to the records file.',
+    aliases: ['recordsPath', 'values'],
+    valueHelp: 'path/to/records.csv',
+    defaultsTo: 'records.csv',
   );
 
   parser.addOption(
@@ -51,14 +51,14 @@ void main(List<String> args) async {
     abbr: 'o',
     help: 'Path to the build output directory.',
     aliases: ['outputDir'],
-    valueHelp: "out/",
-    defaultsTo: "out/",
+    valueHelp: 'out/',
+    defaultsTo: 'out/',
   );
 
   parser.addOption(
-    'resourcesDir',
+    'resDir',
     help: 'Base directory for resource paths in the values file.',
-    aliases: ['resBaseDir'],
+    aliases: ['resourcesDir', 'resBaseDir'],
     valueHelp: "resources/",
   );
 
@@ -68,33 +68,33 @@ void main(List<String> args) async {
         'This directory will be '
         'created if it does not exists.',
     aliases: ['tmp'],
-    valueHelp: "tmp/",
-    defaultsTo: "tmp/",
+    valueHelp: 'tmp/',
+    defaultsTo: 'tmp/',
   );
 
-  parser.addFlag(
-    'keep-tmp',
-    help: 'Keep temporary (intermediate) results.',
-    defaultsTo: false,
-  );
+  // parser.addFlag(
+  //   'keep-tmp',
+  //   help: 'Keep temporary (intermediate) results.',
+  //   defaultsTo: false,
+  // );
 
-  parser.addFlag(
-    'start-from-tmp',
-    help: 'Start from already existing (intermediate) results.',
-    defaultsTo: false,
-  );
+  // parser.addFlag(
+  //   'start-from-tmp',
+  //   help: 'Start from already existing (intermediate) results.',
+  //   defaultsTo: false,
+  // );
 
-  parser.addFlag(
-    'export-pdfs',
-    help: 'Export variants as pdfs.',
-    defaultsTo: false,
-  );
+  // parser.addFlag(
+  //   'export-pdfs',
+  //   help: 'Export variants as pdfs.',
+  //   defaultsTo: false,
+  // );
 
-  parser.addFlag(
-    'merge-pdfs',
-    help: 'Export variants merged into a single pdf.',
-    defaultsTo: false,
-  );
+  // parser.addFlag(
+  //   'merge-pdfs',
+  //   help: 'Export variants merged into a single pdf.',
+  //   defaultsTo: false,
+  // );
 
   parser.addFlag(
     'overwrite-files',
@@ -125,20 +125,20 @@ void main(List<String> args) async {
   }
 
   final templatePath = argsParsed.wasParsed('template')
-      ? argsParsed['template']
-      : config?.template ?? argsParsed['template'];
+      ? argsParsed.option('template')
+      : config?.template ?? argsParsed.option('template');
 
   final valuesPath = argsParsed.wasParsed('values')
-      ? argsParsed['values']
-      : config?.values ?? argsParsed['values'];
+      ? argsParsed.option('values')
+      : config?.records ?? argsParsed.option('values');
 
   final outDir = argsParsed.wasParsed('outDir')
-      ? argsParsed['outDir']
-      : config?.outDir ?? argsParsed['outDir'];
+      ? argsParsed.option('outDir')
+      : config?.outDir ?? argsParsed.option('outDir');
 
   final tmpDir = argsParsed.wasParsed('tmpDir')
-      ? argsParsed['tmpDir']
-      : config?.tmpDir ?? argsParsed['tmpDir'];
+      ? argsParsed.option('tmpDir')
+      : config?.tmpDir ?? argsParsed.option('tmpDir');
 
   List<Placeholder> placeholders = [];
   if (argsParsed.wasParsed('placeholders')) {
@@ -159,18 +159,22 @@ void main(List<String> args) async {
     enablers = config?.enablers;
   }
 
-  final overwriteFiles = argsParsed.wasParsed('overwriteFiles')
-      ? argsParsed['overwriteFiles']
-      : config?.overwriteFiles ?? argsParsed['overwriteFiles'];
+  final resDirPath = argsParsed.wasParsed('resDir')
+      ? argsParsed.option('resDir')
+      : config?.tmpDir ?? argsParsed.option('resDir');
 
-  // TODO: parse resources dir
+  final overwriteFiles = argsParsed.wasParsed('overwriteFiles')
+      ? argsParsed.flag('overwriteFiles')
+      : config?.overwriteFiles ?? argsParsed.flag('overwriteFiles');
+
   final options = Options(
-    templatePath: templatePath,
-    valuesPath: valuesPath,
-    outDir: outDir,
-    tmpDir: tmpDir,
+    templatePath: templatePath!,
+    recordsPath: valuesPath!,
+    outDir: outDir!,
+    tmpDir: tmpDir!,
     placeholders: placeholders,
     enablers: enablers,
+    resDir: resDirPath,
     overwriteFiles: overwriteFiles,
   );
 
@@ -180,15 +184,15 @@ void main(List<String> args) async {
     exit(1);
   }
 
-  final valuesFile = File(options.valuesPath);
-  if (!(await valuesFile.exists())) {
+  final recordsFile = File(options.recordsPath);
+  if (!(await recordsFile.exists())) {
     log.severe("Values File does not exist!");
     exit(1);
   }
 
   Directory? resDir;
-  if (options.resourcesDir != null) {
-    resDir = Directory(options.resourcesDir ?? "./");
+  if (options.resDir != null) {
+    resDir = Directory(options.resDir ?? "./");
     if (!(await resDir.exists())) {
       log.severe("Resources Directory does not exist!");
       exit(1);
@@ -196,11 +200,11 @@ void main(List<String> args) async {
   }
 
   // read values from csv
-  final contents = await valuesFile.readAsString();
+  final contents = await recordsFile.readAsString();
   final lines = csv.decode(contents);
   final header = lines.firstOrNull;
   if (header == null) {
-    log.severe("Values file is empty!");
+    log.severe("Records file is empty!");
     exit(1);
   }
 

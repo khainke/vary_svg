@@ -1,3 +1,4 @@
+import 'package:vary_svg/json/json_utils.dart';
 import 'package:vary_svg/model/enabler.dart';
 import 'package:vary_svg/model/placeholder.dart';
 import 'package:vary_svg/model/options.dart';
@@ -18,14 +19,14 @@ class Config {
   /// see [Options.templatePath].
   final String? template;
 
-  /// see [Options.valuesPath].
-  final String? values;
+  /// see [Options.recordsPath].
+  final String? records;
 
   /// see [Options.outDir].
   final String? outDir;
 
-  /// see [Options.resourcesDir].
-  final String? resourcesDir;
+  /// see [Options.resDir].
+  final String? resDir;
 
   /// see [Options.tmpDir].
   final String? tmpDir;
@@ -41,9 +42,9 @@ class Config {
 
   const Config({
     this.template,
-    this.values,
+    this.records,
     this.outDir,
-    this.resourcesDir,
+    this.resDir,
     this.tmpDir,
     required this.placeholders,
     this.enablers,
@@ -60,11 +61,12 @@ class Config {
 
     return Config(
       template: json['template'] as String?,
-      values: json['values'] as String?,
-      resourcesDir: json['resourcesDir'] as String?,
+      records: json['records'] as String?,
+      resDir: json['resDir'] as String?,
       tmpDir: json['tmpDir'] as String?,
       placeholders: placeholders,
       enablers: enablers,
+      overwriteFiles: tryParseJsonBool(json['overwriteFiles'] as String?),
     );
   }
 }

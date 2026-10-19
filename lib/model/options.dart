@@ -11,10 +11,11 @@ class Options {
   /// A file with an svg template.
   final String templatePath;
 
-  /// Path to the values file.
+  /// Path to the records file.
   ///
-  /// A file with values to be filled into the template.
-  final String valuesPath;
+  /// A file with data records with values to be filled
+  /// into the template. Is expected to be a csv file.
+  final String recordsPath;
 
   /// Path to the build output directory.
   ///
@@ -31,7 +32,7 @@ class Options {
   /// to store images or other resources and dont want to
   /// specify the path prefix in every row of the
   /// values file.
-  final String? resourcesDir;
+  final String? resDir;
 
   /// Path to a directory to store temporary (intermediate) results.
   ///
@@ -43,8 +44,8 @@ class Options {
 
   final List<Placeholder> placeholders;
 
-  /// A list of enablers that determine whether a record in
-  /// the values file will be used to generate a variant.
+  /// A list of enablers that determine whether a record (row) in
+  /// the [recordsPath] file will be used to generate a variant.
   ///
   /// If this list is empty or if all enablers return `true`
   /// for this record, then a variant is produced, otherwise not.
@@ -52,12 +53,12 @@ class Options {
 
   const Options({
     required this.templatePath,
-    required this.valuesPath,
+    required this.recordsPath,
     required this.outDir,
     required this.tmpDir,
-    this.resourcesDir,
     required this.placeholders,
     this.enablers,
-    required this.overwriteFiles,
+    this.resDir,
+    this.overwriteFiles = false,
   });
 }

@@ -82,7 +82,7 @@ class Placeholder {
       value: json['placeholder'] as String?,
       id: json['id'] as String?,
       type: type,
-      column: json['columnName'] as String,
+      column: json['column'] as String,
     );
   }
 }
