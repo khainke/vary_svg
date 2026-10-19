@@ -11,8 +11,8 @@ Future<void> configureLogging({
   Level printLevel = Level.WARNING,
 }) async {
   Logger.root.level = Level.ALL;
-  await _logListener?.cancel();
-  await _printListener?.cancel();
+  _logListener?.cancel();
+  _printListener?.cancel();
   _logListener = Logger.root.onRecord.listen((record) {
     dev.log(
       record.message,
