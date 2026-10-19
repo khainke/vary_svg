@@ -16,7 +16,7 @@ bool isRecordEnabled({
   if (enablers == null) {
     return true;
   }
-  return enablers.every((e) => e.isEnabled(record: record));
+  return enablers.every((e) => e.isRecordEnabled(record: record));
 }
 
 /// Fills-in all [placeholders] in [template] with data from [record].

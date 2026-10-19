@@ -74,7 +74,7 @@ class Enabler {
     );
   }
 
-  bool isEnabled({
+  bool isRecordEnabled({
     required Map<String, dynamic> record,
   }) {
     if (!record.containsKey(column)) return defaultValue;
