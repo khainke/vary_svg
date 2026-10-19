@@ -24,9 +24,9 @@ bool isRecordEnabled({
 /// The [placeholders] in [template] are replaced with the
 /// values from [record] according to their [PlaceholderType].
 ///
-/// If [pathBaseDir] is supplied, values for placeholders
+/// If [resDir] is supplied, values for placeholders
 /// with type [PlaceholderType.path] will be interpreted as
-/// paths relative to the [pathBaseDir].
+/// paths relative to the [resDir].
 ///
 /// When [strict] mode is enabled, this function will throw a
 /// [FormatException] when it cannot locate a suitable XML node
@@ -41,12 +41,12 @@ String fillPlaceholders({
   required String template,
   required List<Placeholder> placeholders,
   required Map<String, dynamic> record,
-  String? pathBaseDir,
+  String? resDir,
   bool strict = false,
   XmlNode? Function(Placeholder p)? onXmlNodeNotFound,
   dynamic Function(Placeholder p)? onValueNotFound,
 }) {
-  final baseDirUri = Uri().resolve(pathBaseDir ?? '');
+  final baseDirUri = Uri().resolve(resDir ?? '');
   final document = XmlDocument.parse(template);
   for (final placeholder in placeholders) {
     // find node in document
