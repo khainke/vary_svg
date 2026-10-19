@@ -5,14 +5,7 @@ enum PlaceholderType {
   text(name: "text"),
 
   /// A placeholder for a file path.
-  path(name: "path"),
-
-  /// A placeholder for a boolean flag.
-  ///
-  /// Boolean placeholders currently dont have support for any
-  /// modifications to the template.
-  /// They may only be used as [Options.enablers].
-  bool(name: "bool");
+  path(name: "path");
 
   final String name;
 
@@ -64,12 +57,6 @@ class Placeholder {
     this.value,
     required this.column,
   }) : type = PlaceholderType.path;
-
-  const Placeholder.bool({
-    this.id,
-    this.value,
-    required this.column,
-  }) : type = PlaceholderType.bool;
 
   factory Placeholder.fromJson(Map<String, Object?> json) {
     String typeName = json['type'] as String;
