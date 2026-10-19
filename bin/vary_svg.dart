@@ -6,6 +6,7 @@ import 'package:csv/csv.dart';
 import 'package:logging/logging.dart';
 import 'package:vary_svg/application/logging.dart';
 import 'package:vary_svg/model/config.dart';
+import 'package:vary_svg/model/enabler.dart';
 import 'package:vary_svg/model/options.dart';
 import 'package:vary_svg/model/placeholder.dart';
 
@@ -149,19 +150,20 @@ void main(List<String> args) async {
     placeholders = config?.placeholders ?? [];
   }
 
-  List<Placeholder> enablers = [];
+  List<Enabler>? enablers;
   if (argsParsed.wasParsed('enablers')) {
     enablers = (jsonDecode(argsParsed['enablers'] as String) as List<dynamic>)
-        .map((e) => Placeholder.fromJson(e))
+        .map((e) => Enabler.fromJson(e))
         .toList();
   } else {
-    enablers = config?.enablers ?? [];
+    enablers = config?.enablers;
   }
 
   final overwriteFiles = argsParsed.wasParsed('overwriteFiles')
       ? argsParsed['overwriteFiles']
       : config?.overwriteFiles ?? argsParsed['overwriteFiles'];
 
+  // TODO: parse resources dir
   final options = Options(
     templatePath: templatePath,
     valuesPath: valuesPath,

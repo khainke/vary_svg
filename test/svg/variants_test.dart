@@ -46,7 +46,7 @@ void main() {
       final res = fillPlaceholders(
         template: _testSvg,
         placeholders: [Placeholder.text(id: 'tspan2', column: 'text')],
-        values: {'text': value},
+        record: {'text': value},
       );
       final actual =
           XmlDocument.parse(res).xpath('//*[@id="tspan2"]').first.innerText;
@@ -60,7 +60,7 @@ void main() {
         placeholders: [
           Placeholder.text(value: 'lorem ipsum dolor ', column: 'text')
         ],
-        values: {'text': value},
+        record: {'text': value},
       );
       final actual =
           XmlDocument.parse(res).xpath('//*[@id="tspan2"]').first.innerText;
@@ -72,7 +72,7 @@ void main() {
       final res = fillPlaceholders(
         template: _testSvg,
         placeholders: [Placeholder.text(id: 'tspan2', column: 'text')],
-        values: {'text': value},
+        record: {'text': value},
       );
       final actual =
           XmlDocument.parse(res).xpath('//*[@id="tspan2"]').first.innerText;
@@ -84,7 +84,7 @@ void main() {
       final res = fillPlaceholders(
         template: _testSvg,
         placeholders: [Placeholder.path(id: 'image1', column: 'path')],
-        values: {'path': value},
+        record: {'path': value},
       );
       final actual = XmlDocument.parse(res)
           .xpath('//*[@id="image1"]')
@@ -100,7 +100,7 @@ void main() {
         placeholders: [
           Placeholder.path(value: '../Pictures/example.jpg', column: 'path')
         ],
-        values: {'path': value},
+        record: {'path': value},
       );
       final actual = XmlDocument.parse(res)
           .xpath('//*[@id="image1"]')

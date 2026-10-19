@@ -1,11 +1,28 @@
+import 'package:vary_svg/model/enabler.dart';
 import 'package:vary_svg/model/placeholder.dart';
 import 'package:xml/xml.dart';
 import 'package:xml/xpath.dart';
 
-/// Fills in all [placeholders] in [template] with [values].
+/// Determines whether a [record] is enabled according to
+/// the [enablers].
 ///
-/// The [placeholders] in [template] are replaced with the [values]
-/// according to their [PlaceholderType].
+/// Looks up the corresponding values of [enablers] in
+/// [record] and if they all evaluate to truthy values,
+/// then returns `true` otherwise `false`.
+bool isRecordEnabled({
+  required Map<String, dynamic> record,
+  required List<Enabler>? enablers,
+}) {
+  if (enablers == null) {
+    return true;
+  }
+  return enablers.every((e) => e.isEnabled(record: record));
+}
+
+/// Fills-in all [placeholders] in [template] with data from [record].
+///
+/// The [placeholders] in [template] are replaced with the
+/// values from [record] according to their [PlaceholderType].
 ///
 /// If [pathBaseDir] is supplied, values for placeholders
 /// with type [PlaceholderType.path] will be interpreted as
@@ -14,7 +31,7 @@ import 'package:xml/xpath.dart';
 /// When [strict] mode is enabled, this function will throw a
 /// [FormatException] when it cannot locate a suitable XML node
 /// in the document for a placeholder in [placeholders], or
-/// when it cannot find a replacement value in [values].
+/// when it cannot find a replacement value in [record].
 /// Otherwise this function, will just continue with the
 /// next placeholder.
 ///
@@ -23,7 +40,7 @@ import 'package:xml/xpath.dart';
 String fillPlaceholders({
   required String template,
   required List<Placeholder> placeholders,
-  required Map<String, dynamic> values,
+  required Map<String, dynamic> record,
   String? pathBaseDir,
   bool strict = false,
   XmlNode? Function(Placeholder p)? onXmlNodeNotFound,
@@ -70,7 +87,7 @@ String fillPlaceholders({
     }
 
     // get replacement value
-    dynamic value = values[placeholder.column];
+    dynamic value = record[placeholder.column];
     // if not found, try fallback
     if (value == null && onValueNotFound != null) {
       value = onValueNotFound(placeholder);

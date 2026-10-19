@@ -1,3 +1,4 @@
+import 'package:vary_svg/model/enabler.dart';
 import 'package:vary_svg/model/placeholder.dart';
 import 'package:vary_svg/model/options.dart';
 
@@ -36,7 +37,7 @@ class Config {
   final List<Placeholder> placeholders;
 
   /// see [Options.enablers].
-  final List<Placeholder>? enablers;
+  final List<Enabler>? enablers;
 
   const Config({
     this.template,
@@ -55,7 +56,7 @@ class Config {
         placeholdersJson.map((e) => Placeholder.fromJson(e)).toList();
 
     final enablersJson = json['enablers'] as List<Map<String, Object?>>?;
-    final enablers = enablersJson?.map((e) => Placeholder.fromJson(e)).toList();
+    final enablers = enablersJson?.map((e) => Enabler.fromJson(e)).toList();
 
     return Config(
       template: json['template'] as String?,

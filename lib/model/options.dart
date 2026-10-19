@@ -1,3 +1,4 @@
+import 'package:vary_svg/model/enabler.dart';
 import 'package:vary_svg/model/placeholder.dart';
 import 'package:vary_svg/model/config.dart';
 
@@ -42,13 +43,12 @@ class Options {
 
   final List<Placeholder> placeholders;
 
-  /// A list of placeholders that determine whether a row in
+  /// A list of enablers that determine whether a record in
   /// the values file will be used to generate a variant.
   ///
-  /// If this list is empty or if all values of placeholders for a
-  /// row in the values file evaluate to a truthy value, then
-  /// a variant is produced, otherwise not.
-  final List<Placeholder>? enablers;
+  /// If this list is empty or if all enablers return `true`
+  /// for this record, then a variant is produced, otherwise not.
+  final List<Enabler>? enablers;
 
   const Options({
     required this.templatePath,
